@@ -4,6 +4,8 @@
 
 ![FullPage Saver](extension-chrome/docs/capturas/portada.png)
 
+**[➜ Instalar desde la Chrome Web Store](https://chromewebstore.google.com/detail/fullpage-saver-%E2%80%93-guardar/igjphghlkmidddmnmlmdnhnepehpoena)** · o [manualmente desde el código](#opción-2-manualmente-desde-el-código)
+
 > Manifest V3 · JavaScript puro, sin dependencias ni código remoto · 7 idiomas · todo se procesa en el equipo del usuario.
 
 ## Funciones
@@ -35,12 +37,22 @@
 |---|---|
 | ![Antes y después](extension-chrome/docs/capturas/antes-despues.png) | ![Temas](extension-chrome/docs/capturas/temas.png) |
 
-## Instalar desde el código
+## Instalar
 
-1. Descarga o clona este repositorio.
-2. Abre `chrome://extensions` y activa el **Modo de desarrollador**.
+Hay dos formas:
+
+### Opción 1: desde la Chrome Web Store (recomendada)
+
+Entra en **[FullPage Saver en la Chrome Web Store](https://chromewebstore.google.com/detail/fullpage-saver-%E2%80%93-guardar/igjphghlkmidddmnmlmdnhnepehpoena)** y pulsa **Añadir a Chrome**. Se actualiza sola cada vez que sale una versión nueva.
+
+### Opción 2: manualmente, desde el código
+
+1. Descarga o clona este repositorio (en GitHub: **Code → Download ZIP**, y descomprímelo).
+2. Abre `chrome://extensions` y activa el **Modo de desarrollador** (arriba a la derecha).
 3. Pulsa **Cargar descomprimida** y elige la carpeta `extension-chrome` (la que contiene `manifest.json`).
 4. Fija FullPage Saver en la barra de extensiones.
+
+Instalada así no se actualiza sola: para tener una versión nueva, descarga el código otra vez y pulsa el botón de recargar de la extensión en `chrome://extensions`.
 
 Para cambiar el atajo de teclado: `chrome://extensions/shortcuts`.
 
