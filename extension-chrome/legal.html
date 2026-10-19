@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title data-i18n="legal.docTitle">FullPage Saver – Aviso legal y privacidad</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --brand-1: #14b8a6;
+      --brand-2: #4f46e5;
+      --brand-3: #312e81;
+      --bg: #f5f6fb;
+      --card: #ffffff;
+      --border: #e4e7f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --note-bg: #fff8eb;
+      --note-border: #f5c76b;
+      font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1020;
+        --card: #141a2e;
+        --border: #252e4a;
+        --text: #e8ebf5;
+        --muted: #97a3bd;
+        --note-bg: #2a2214;
+        --note-border: #7a5a1c;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 64px 16px 56px;
+      line-height: 1.65;
+      background:
+        linear-gradient(135deg, var(--brand-1), var(--brand-2) 62%, var(--brand-3)) top / 100% 220px no-repeat,
+        var(--bg);
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 36px 40px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: 0 1px 2px rgb(15 23 42 / 5%), 0 18px 48px rgb(15 23 42 / 12%);
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.025em;
+      line-height: 1.2;
+    }
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 30px 0 8px;
+      font-size: 18px;
+      letter-spacing: -.01em;
+    }
+    h2::before {
+      content: "";
+      width: 6px;
+      height: 20px;
+      flex: 0 0 6px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, var(--brand-1), var(--brand-2));
+    }
+    .updated {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .highlight {
+      padding: 4px 20px;
+      border: 1px solid var(--note-border);
+      border-radius: 14px;
+      background: var(--note-bg);
+    }
+    a {
+      color: var(--brand-2);
+      font-weight: 600;
+    }
+    @media (prefers-color-scheme: dark) {
+      a {
+        color: #a5b4fc;
+      }
+    }
+    @media (max-width: 600px) {
+      body {
+        padding-top: 32px;
+      }
+      main {
+        padding: 22px 20px;
+      }
+      h1 {
+        font-size: 23px;
+      }
+    }
+  :root {
+      --particles: 1;
+      --particle-page: 99 102 241;
+      --particle-sparkles: 0.12;
+    }
+    .particles-page {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      pointer-events: none;
+    }
+    main {
+      position: relative;
+      z-index: 1;
+    }
+    :root[data-theme="pink"] {
+      --brand-1: #f9a8d4;
+      --brand-2: #ec4899;
+      --brand-3: #9d174d;
+      --bg: #fdf4f8;
+      --border: #f6dbe8;
+      --text: #3b0a24;
+      --muted: #8a5a72;
+      --particle-page: 236 72 153;
+      --particle-sparkles: 0.4;
+      --note-bg: #fff0f6;
+      --note-border: #f9a8d4;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root[data-theme="pink"] {
+        --bg: #1a0b14;
+        --card: #26111e;
+        --border: #46213a;
+        --text: #fbe7f1;
+        --muted: #cf9bb6;
+      }
+      [data-theme="pink"] a {
+        color: #f9a8d4;
+      }
+    }
+    :root[data-theme="classic"] {
+      color-scheme: light;
+      --particles: 0;
+      --brand-2: #4338ca;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --border: #dfe5ee;
+      --text: #182337;
+      --muted: #65738a;
+      --note-bg: #fff7e6;
+      --note-border: #f5c76b;
+      font-family: "Segoe UI", system-ui, sans-serif;
+    }
+    [data-theme="classic"] body {
+      background: #f4f7fb;
+      padding-top: 32px;
+    }
+    [data-theme="classic"] main {
+      border-radius: 16px;
+      box-shadow: none;
+    }
+    [data-theme="classic"] h1 {
+      font-size: 26px;
+      font-weight: 700;
+    }
+    [data-theme="classic"] h2::before {
+      display: none;
+    }
+    [data-theme="classic"] a {
+      color: #4338ca;
+    }
+  </style>
+  <script src="theme.js"></script>
+</head>
+<body data-particles="page">
+  <main id="legal"></main>
+  <script src="i18n.js"></script>
+  <script src="legal-i18n.js"></script>
+</body>
+</html>

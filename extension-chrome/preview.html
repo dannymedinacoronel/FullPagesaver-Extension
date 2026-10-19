@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title data-i18n="pv.docTitle">Vista previa PDF | FullPage Saver</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --brand-1: #14b8a6;
+      --brand-2: #4f46e5;
+      --bg: #eef0f7;
+      --card: #ffffff;
+      --border: #e4e7f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --soft: #eef1fb;
+      font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    @media screen and (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1020;
+        --card: #141a2e;
+        --border: #252e4a;
+        --text: #e8ebf5;
+        --muted: #97a3bd;
+        --soft: #1c2440;
+      }
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .toolbar {
+      position: sticky;
+      z-index: 1;
+      top: 0;
+      display: flex;
+      min-height: 64px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      padding: 10px max(16px, calc((100vw - 1100px) / 2));
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 85%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .toolbar p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .toolbar p {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toolbar-actions button {
+      white-space: nowrap;
+    }
+
+    .name-field {
+      display: grid;
+      gap: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    #pdf-name {
+      width: min(26vw, 240px);
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      background: var(--soft);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #file-select {
+      max-width: 220px;
+      min-height: 40px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      color: var(--text);
+      background: var(--soft);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    button {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      color: var(--text);
+      background: var(--card);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
+    #download {
+      border: 0;
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand-1), var(--brand-2) 70%);
+      box-shadow: 0 6px 18px rgb(79 70 229 / 30%);
+    }
+
+    .skipped {
+      max-width: 908px;
+      margin: 0 auto 16px;
+      padding: 12px 16px;
+      border: 1px solid #f59e0b;
+      border-radius: 12px;
+      color: var(--text);
+      background: rgb(245 158 11 / 12%);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .skipped[hidden] {
+      display: none;
+    }
+
+    .skipped ul {
+      margin: 6px 0 0;
+      padding-left: 20px;
+    }
+
+    #status {
+      max-width: 940px;
+      margin: 20px auto;
+      padding: 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    #pages {
+      padding: 20px 0 40px;
+    }
+
+    .page {
+      box-sizing: border-box;
+      display: flex;
+      width: var(--sheet-width);
+      height: var(--sheet-height);
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      padding: var(--sheet-margin);
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 10px 30px rgb(15 23 42 / 18%);
+      border-radius: 4px;
+    }
+
+    /* El estilo de .page anulaba el atributo hidden: en pantalla se veían
+       las hojas de todos los archivos a la vez. */
+    .page[hidden] {
+      display: none;
+    }
+
+    .page img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: var(--image-fit);
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      :root,
+      body {
+        background: #fff;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      #status:empty {
+        display: none;
+      }
+
+      #pages {
+        padding: 0;
+      }
+
+      .page[hidden] {
+        display: none !important;
+      }
+
+      .page {
+        width: var(--sheet-width);
+        height: var(--sheet-height);
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .page:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+
+      .page.is-last-in-file {
+        break-after: auto;
+        page-break-after: auto;
+      }
+    }
+  :root[data-theme="pink"] {
+      --brand-1: #f9a8d4;
+      --brand-2: #ec4899;
+      --bg: #fbeef4;
+      --border: #f6dbe8;
+      --text: #3b0a24;
+      --muted: #8a5a72;
+      --soft: #fde7f1;
+    }
+    @media screen and (prefers-color-scheme: dark) {
+      :root[data-theme="pink"] {
+        --bg: #1a0b14;
+        --card: #26111e;
+        --border: #46213a;
+        --text: #fbe7f1;
+        --muted: #cf9bb6;
+        --soft: #33172a;
+      }
+    }
+    [data-theme="pink"] #download {
+      box-shadow: 0 6px 18px rgb(236 72 153 / 30%);
+    }
+    :root[data-theme="classic"] {
+      color-scheme: light;
+      --brand-1: #3e67d6;
+      --brand-2: #3e67d6;
+      --bg: #eef1f6;
+      --card: #ffffff;
+      --border: #dfe5ef;
+      --text: #33445f;
+      --muted: #53637a;
+      --soft: #ffffff;
+      font-family: "Segoe UI", system-ui, sans-serif;
+    }
+    [data-theme="classic"] .toolbar {
+      background: #ffffff;
+      backdrop-filter: none;
+    }
+    [data-theme="classic"] button,
+    [data-theme="classic"] #file-select {
+      border-radius: 8px;
+    }
+    [data-theme="classic"] #download {
+      background: #3e67d6;
+      box-shadow: none;
+    }
+  </style>
+  <script src="theme.js"></script>
+</head>
+<body>
+  <header class="toolbar">
+    <p id="summary" data-i18n="pv.loading">Cargando vista previa…</p>
+    <div class="toolbar-actions">
+      <select id="file-select" aria-label="Archivo PDF independiente" data-i18n-attr="aria-label:pv.fileSelect" hidden></select>
+      <label class="name-field">
+        <span data-i18n="pv.nameLabel">Nombre del PDF</span>
+        <input id="pdf-name" type="text" autocomplete="off" spellcheck="false" disabled>
+      </label>
+      <button id="delete-job" type="button" data-i18n="pv.delete">Eliminar datos temporales</button>
+      <button id="print" type="button" class="secondary" disabled data-i18n="pv.print">Imprimir…</button>
+      <button id="download" type="button" disabled data-i18n="pv.download">Descargar PDF</button>
+    </div>
+  </header>
+  <p id="status" role="status" aria-live="polite"></p>
+  <div id="skipped" class="skipped" role="alert" hidden></div>
+  <main id="pages" aria-label="Páginas listas para exportar" data-i18n-attr="aria-label:pv.pagesAria"></main>
+  <script src="i18n.js"></script>
+  <script src="pdfwriter.js"></script>
+  <script src="preview.js"></script>
+</body>
+</html>

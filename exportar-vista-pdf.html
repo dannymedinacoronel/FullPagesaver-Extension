@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exportar páginas guardadas a PDF</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, sans-serif;
+      color: #172033;
+      background: #f3f5f8;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .screen-only {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 28px;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 8px 28px #17203318;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 1.6rem;
+    }
+
+    p {
+      line-height: 1.55;
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-weight: 650;
+    }
+
+    input,
+    button,
+    select {
+      font: inherit;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0 18px;
+    }
+
+    .options label {
+      margin-bottom: 6px;
+    }
+
+    .options select,
+    input[type="file"] {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 8px;
+    }
+
+    #file-list {
+      padding-left: 22px;
+    }
+
+    button {
+      margin: 12px 8px 0 0;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 7px;
+      color: white;
+      background: #1457c5;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+    }
+
+    #status {
+      min-height: 1.5em;
+      margin-top: 16px;
+    }
+
+    #pages {
+      display: none;
+    }
+
+    .page {
+      box-sizing: border-box;
+      display: flex;
+      width: min(100%, var(--sheet-width, 210mm));
+      height: var(--sheet-height, 297mm);
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      overflow: hidden;
+      padding: var(--sheet-margin, 10mm);
+      background: white;
+      box-shadow: 0 3px 16px #17203320;
+    }
+
+    .page img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .page[hidden] {
+      display: none !important;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .screen-only {
+        display: none !important;
+      }
+
+      #pages {
+        display: block;
+      }
+
+      .page {
+        width: var(--sheet-width);
+        height: var(--sheet-height);
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .page:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="screen-only">
+    <h1>Exportar archivos HTML guardados a PDF</h1>
+    <p>
+      Selecciona uno o varios archivos HTML guardados que contengan páginas como
+      imágenes de <code>canvas</code>. Los archivos se procesan localmente.
+    </p>
+    <p>
+      Para crear el PDF, el navegador abrirá el diálogo de impresión: elige
+      «Guardar como PDF». La opción «Todos juntos» crea un PDF combinado; para
+      tener un PDF por archivo, selecciona cada archivo en «Contenido» y repite
+      la exportación.
+    </p>
+
+    <label for="source">Archivos HTML guardados</label>
+    <input id="source" type="file" accept=".html,.htm,text/html" multiple>
+    <ol id="file-list" aria-live="polite"></ol>
+
+    <div class="options">
+      <div>
+        <label for="scope">Contenido del PDF</label>
+        <select id="scope" disabled>
+          <option value="all">Todos juntos</option>
+        </select>
+      </div>
+      <div>
+        <label for="paper">Tamaño de papel</label>
+        <select id="paper">
+          <option value="A4">A4</option>
+          <option value="Letter">Carta (Letter)</option>
+          <option value="A3">A3</option>
+          <option value="Legal">Legal</option>
+        </select>
+      </div>
+      <div>
+        <label for="orientation">Orientación</label>
+        <select id="orientation">
+          <option value="portrait">Vertical</option>
+          <option value="landscape">Horizontal</option>
+        </select>
+      </div>
+      <div>
+        <label for="margin">Márgenes</label>
+        <select id="margin">
+          <option value="0">Sin margen</option>
+          <option value="5">Estrecho (5 mm)</option>
+          <option value="10" selected>Normal (10 mm)</option>
+          <option value="15">Amplio (15 mm)</option>
+        </select>
+      </div>
+      <div>
+        <label for="order">Orden de archivos</label>
+        <select id="order">
+          <option value="selected">Orden de selección</option>
+          <option value="name">Nombre (A-Z)</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <button id="prepare" type="button" disabled>Preparar archivos</button>
+      <button id="save" type="button" disabled>Guardar como PDF</button>
+    </div>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <main id="pages" aria-label="Páginas preparadas para exportar"></main>
+  <style id="print-settings"></style>
+
+  <script>
+    const sourceInput = document.querySelector("#source");
+    const prepareButton = document.querySelector("#prepare");
+    const saveButton = document.querySelector("#save");
+    const status = document.querySelector("#status");
+    const pages = document.querySelector("#pages");
+    const fileList = document.querySelector("#file-list");
+    const scopeSelect = document.querySelector("#scope");
+    const paperSelect = document.querySelector("#paper");
+    const orientationSelect = document.querySelector("#orientation");
+    const marginSelect = document.querySelector("#margin");
+    const orderSelect = document.querySelector("#order");
+    const printSettings = document.querySelector("#print-settings");
+    const paperSizes = {
+      A4: [210, 297],
+      Letter: [215.9, 279.4],
+      A3: [297, 420],
+      Legal: [215.9, 355.6]
+    };
+    let preparedFiles = [];
+
+    sourceInput.addEventListener("change", () => {
+      prepareButton.disabled = sourceInput.files.length === 0;
+      saveButton.disabled = true;
+      pages.replaceChildren();
+      fileList.replaceChildren();
+      scopeSelect.replaceChildren(new Option("Todos juntos", "all"));
+      scopeSelect.disabled = true;
+      preparedFiles = [];
+      status.textContent = "";
+    });
+
+    for (const control of [paperSelect, orientationSelect, marginSelect]) {
+      control.addEventListener("change", updatePrintSettings);
+    }
+
+    function updatePrintSettings() {
+      const [shortSide, longSide] = paperSizes[paperSelect.value];
+      const landscape = orientationSelect.value === "landscape";
+      const width = landscape ? longSide : shortSide;
+      const height = landscape ? shortSide : longSide;
+      const margin = Number(marginSelect.value);
+      const orientation = landscape ? "landscape" : "portrait";
+
+      document.documentElement.style.setProperty("--sheet-width", `${width}mm`);
+      document.documentElement.style.setProperty("--sheet-height", `${height}mm`);
+      document.documentElement.style.setProperty("--sheet-margin", `${margin}mm`);
+      printSettings.textContent = `@page { size: ${paperSelect.value} ${orientation}; margin: 0; }`;
+    }
+
+    function findCanvasImage(canvas) {
+      const savedImage = canvas.getAttribute("data-savepage-canvasdatauri");
+      if (savedImage && savedImage.startsWith("data:image/")) {
+        return savedImage;
+      }
+
+      const background = canvas.getAttribute("style") || "";
+      const match = background.match(/url\(["']?(data:image\/[^"')]+)["']?\)/i);
+      return match ? match[1] : null;
+    }
+
+    function collectPageImages(html, images, depth = 0) {
+      if (depth > 16) {
+        throw new Error("El archivo contiene demasiados niveles de marcos anidados.");
+      }
+
+      const parsed = new DOMParser().parseFromString(html, "text/html");
+      for (const element of parsed.querySelectorAll("canvas, iframe[srcdoc]")) {
+        if (element.localName === "canvas") {
+          const src = findCanvasImage(element);
+          if (src) {
+            images.push({
+              src,
+              width: Number(element.getAttribute("width")) || null,
+              height: Number(element.getAttribute("height")) || null
+            });
+          }
+        } else {
+          collectPageImages(element.getAttribute("srcdoc"), images, depth + 1);
+        }
+      }
+    }
+
+    function selectedFilesInOrder() {
+      const files = Array.from(sourceInput.files);
+      if (orderSelect.value === "name") {
+        files.sort((first, second) =>
+          first.name.localeCompare(second.name, "es", { sensitivity: "base" })
+        );
+      }
+      return files;
+    }
+
+    prepareButton.addEventListener("click", async () => {
+      const files = selectedFilesInOrder();
+      if (files.length === 0) {
+        status.textContent = "Selecciona primero uno o varios archivos HTML.";
+        return;
+      }
+
+      prepareButton.disabled = true;
+      saveButton.disabled = true;
+      pages.replaceChildren();
+      fileList.replaceChildren();
+      status.textContent = `Leyendo ${files.length} archivo(s) local(es)…`;
+      const failures = [];
+      preparedFiles = [];
+
+      try {
+        for (const [fileIndex, file] of files.entries()) {
+          try {
+            const images = [];
+            collectPageImages(await file.text(), images);
+            if (images.length === 0) {
+              failures.push(`${file.name}: no contiene páginas de canvas guardadas.`);
+              continue;
+            }
+
+            const preparedIndex = preparedFiles.length;
+            preparedFiles.push({ file, images });
+            for (const [pageIndex, imageData] of images.entries()) {
+              const page = document.createElement("section");
+              page.className = "page";
+              page.dataset.fileIndex = String(preparedIndex);
+              page.setAttribute("aria-label", `${file.name}, página ${pageIndex + 1}`);
+
+              const image = document.createElement("img");
+              image.src = imageData.src;
+              image.alt = `${file.name}, página ${pageIndex + 1}`;
+              if (imageData.width && imageData.height) {
+                image.dataset.originalSize = `${imageData.width} × ${imageData.height}`;
+              }
+              page.append(image);
+              pages.append(page);
+            }
+
+            const item = document.createElement("li");
+            item.textContent = `${file.name}: ${images.length} página(s)`;
+            fileList.append(item);
+          } catch (error) {
+            failures.push(`${file.name}: ${error.message}`);
+          }
+        }
+
+        if (preparedFiles.length === 0) {
+          status.textContent = failures.length
+            ? `No se preparó ningún archivo. ${failures.join(" ")}`
+            : "No se encontraron páginas para exportar.";
+          return;
+        }
+
+        scopeSelect.replaceChildren(new Option("Todos juntos", "all"));
+        for (const [index, { file, images }] of preparedFiles.entries()) {
+          scopeSelect.add(new Option(`${file.name} (${images.length} página(s))`, String(index)));
+        }
+        scopeSelect.disabled = false;
+        saveButton.disabled = false;
+
+        const totalPages = preparedFiles.reduce((total, entry) => total + entry.images.length, 0);
+        const summary = `Se prepararon ${preparedFiles.length} archivo(s) y ${totalPages} página(s).`;
+        status.textContent = failures.length
+          ? `${summary} Algunos archivos no se pudieron preparar: ${failures.join(" ")}`
+          : summary;
+      } finally {
+        prepareButton.disabled = false;
+      }
+    });
+
+    scopeSelect.addEventListener("change", () => {
+      const selected = scopeSelect.value;
+      for (const page of pages.children) {
+        page.hidden = selected !== "all" && page.dataset.fileIndex !== selected;
+      }
+    });
+
+    saveButton.addEventListener("click", () => {
+      if (pages.childElementCount === 0 || scopeSelect.disabled) {
+        status.textContent = "Primero prepara las páginas del archivo.";
+        return;
+      }
+      window.print();
+    });
+
+    updatePrintSettings();
+  </script>
+</body>
+</html>

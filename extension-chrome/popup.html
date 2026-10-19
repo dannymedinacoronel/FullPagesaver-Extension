@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>FullPage Saver</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+  <!-- Iconos (trazo de 24 px) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-html" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m10 12-2 2.5 2 2.5"/><path d="m14 12 2 2.5-2 2.5"/></symbol>
+    <symbol id="i-pdf" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6"/><path d="m9 14.5 3 3 3-3"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></symbol>
+    <symbol id="i-merge" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+    <symbol id="i-tabs" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18"/><path d="M7 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M13 7V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.7-.8 1.7-1.7 0-.9-.7-1.3-.7-2.1 0-.9.7-1.5 1.6-1.5H17a4 4 0 0 0 4-4c0-4.7-4-8.7-9-8.7z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  </svg>
+
+  <main class="popup">
+    <header class="hero" data-particles="hero">
+      <img class="brand-mark" src="favicon.svg" alt="">
+      <div>
+        <p class="eyebrow">FULLPAGE SAVER</p>
+        <h1 id="heading" data-i18n="popup.heading">Guarda la web entera</h1>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- Primera vez: elegir idioma -->
+      <section id="language-picker" class="language-picker" hidden>
+        <h2 id="welcome-title" data-i18n="welcome.title">Elige tu idioma</h2>
+        <p id="welcome-subtitle" class="welcome-subtitle"></p>
+        <div id="language-list" class="language-list" role="list"></div>
+        <p class="privacy-note" data-i18n="welcome.hint">Podrás cambiarlo cuando quieras desde el menú.</p>
+      </section>
+
+      <div id="main-view" hidden>
+        <button id="save-html" class="choice choice-primary" type="button">
+          <span class="choice-icon icon-html" aria-hidden="true"><svg><use href="#i-html"/></svg></span>
+          <span class="choice-copy">
+            <strong data-i18n="popup.html.title">Guardar página completa (.html)</strong>
+            <span data-i18n="popup.html.desc">Abre menús, baja hasta el final e incrusta imágenes y estilos en un solo archivo.</span>
+          </span>
+          <svg class="choice-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </button>
+
+        <div class="pdf-group">
+          <button id="save-pdf" class="choice" type="button">
+            <span class="choice-icon icon-pdf" aria-hidden="true"><svg><use href="#i-pdf"/></svg></span>
+            <span class="choice-copy">
+              <strong data-i18n="popup.pdf.title">Captura completa como PDF (imagen)</strong>
+              <span data-i18n="popup.pdf.desc">Copia las páginas de los visores de PDF o recorre la página con capturas y genera el PDF.</span>
+            </span>
+            <svg class="choice-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="pdf-options">
+            <label for="paper">
+              <span data-i18n="popup.paper">Papel para el PDF</span>
+              <select id="paper">
+                <option value="A4">A4</option>
+                <option value="Letter" data-i18n="paper.letter">Carta</option>
+                <option value="A3">A3</option>
+                <option value="Legal" data-i18n="paper.legal">Legal</option>
+              </select>
+            </label>
+            <label for="orientation">
+              <span data-i18n="popup.orientation">Orientación</span>
+              <select id="orientation">
+                <option value="portrait" data-i18n="opt.portrait">Vertical</option>
+                <option value="landscape" data-i18n="opt.landscape">Horizontal</option>
+              </select>
+            </label>
+            <label for="speed" data-i18n-attr="title:speed.hint">
+              <span data-i18n="popup.speed">Velocidad</span>
+              <select id="speed">
+                <option value="fast" data-i18n="speed.fast">Rápida</option>
+                <option value="normal" data-i18n="speed.normal">Normal</option>
+                <option value="slow" data-i18n="speed.slow">Lenta</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <!-- Acciones secundarias: tres teselas pequeñas (el popup no puede pasar de 600 px) -->
+        <div class="choice-row choice-tiles">
+          <button id="save-tabs" class="choice choice-tile" type="button" data-i18n-attr="title:popup.batch.desc">
+            <span class="choice-icon icon-tabs" aria-hidden="true"><svg><use href="#i-tabs"/></svg></span>
+            <strong data-i18n="tile.batch">Varias pestañas</strong>
+          </button>
+          <button id="save-page" class="choice choice-tile" type="button" data-i18n-attr="title:popup.mht.desc">
+            <span class="choice-icon icon-archive" aria-hidden="true"><svg><use href="#i-archive"/></svg></span>
+            <strong data-i18n="tile.mht">Archivo web (.mht)</strong>
+          </button>
+          <button id="open-pdf" class="choice choice-tile" type="button" data-i18n-attr="title:popup.convert.desc">
+            <span class="choice-icon icon-merge" aria-hidden="true"><svg><use href="#i-merge"/></svg></span>
+            <strong data-i18n="tile.convert">HTML guardados a PDF</strong>
+          </button>
+        </div>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+
+        <footer class="popup-footer">
+          <p class="privacy-note with-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg><span data-i18n="popup.note">Todo se procesa en tu equipo. Para el PDF: abre el HTML guardado y pulsa Ctrl+P → «Guardar como PDF».</span></p>
+          <p class="privacy-note"><span data-i18n="popup.rights">Guarda solo contenido sobre el que tengas derechos o permiso. Eres responsable del uso que hagas de las copias.</span> <a href="legal.html" target="_blank" data-i18n="legal.link">Aviso legal y privacidad</a></p>
+          <div class="settings-row">
+            <label class="pill-select" for="language-select">
+              <svg aria-hidden="true"><use href="#i-globe"/></svg>
+              <span class="sr-only" data-i18n="lang.label">Idioma</span>
+              <select id="language-select"></select>
+            </label>
+            <label class="pill-select" for="theme-select">
+              <svg aria-hidden="true"><use href="#i-palette"/></svg>
+              <span class="sr-only" data-i18n="theme.label">Tema</span>
+              <select id="theme-select">
+                <option value="modern" data-i18n="theme.modern">Moderno</option>
+                <option value="classic" data-i18n="theme.classic">Clásico</option>
+                <option value="pink" data-i18n="theme.pink">Rosa</option>
+              </select>
+            </label>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </main>
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

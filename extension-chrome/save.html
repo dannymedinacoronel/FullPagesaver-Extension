@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title data-i18n="save.windowTitle">FullPage Saver · Guardando…</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="review.css">
+  <script src="theme.js"></script>
+</head>
+<body class="save-window">
+  <main class="popup">
+    <header class="hero" data-particles="hero">
+      <img class="brand-mark" src="favicon.svg" alt="">
+      <div>
+        <p class="eyebrow">FULLPAGE SAVER</p>
+        <h1 id="page-title" data-i18n="save.preparing">Preparando…</h1>
+      </div>
+      <span class="state-badge" aria-hidden="true"></span>
+    </header>
+    <div class="content">
+      <div class="progress" aria-hidden="true"><span></span></div>
+      <p id="status" class="status" role="status" aria-live="polite" data-i18n="save.starting">Iniciando…</p>
+      <div id="permission" class="permission" hidden>
+        <p data-i18n="perm.text">Para incrustar las imágenes, estilos y fuentes que la página carga desde otros dominios, Chrome te pedirá permiso para que la extensión los descargue. Solo se usa al guardar y no se envía nada a ningún servidor.</p>
+        <button id="grant" class="choice choice-primary" type="button"><span class="choice-copy"><strong data-i18n="perm.grant">Permitir e incrustar todo</strong></span></button>
+        <button id="skip" class="choice" type="button"><span class="choice-copy"><strong data-i18n="perm.skip">Continuar sin permiso</strong><span data-i18n="perm.skipDesc">Los recursos de otros dominios quedarán enlazados, no incrustados.</span></span></button>
+      </div>
+      <div id="rate" class="rate-card" hidden>
+        <p class="rate-stars" aria-hidden="true">★★★★★</p>
+        <p data-i18n="rate.text">¿Te está siendo útil FullPage Saver? Una valoración en la Chrome Web Store ayuda muchísimo a que otras personas la encuentren.</p>
+        <button id="rate-yes" class="choice choice-primary" type="button"><span class="choice-copy"><strong data-i18n="rate.yes">Valorar en la Chrome Web Store</strong></span></button>
+        <div class="rate-later">
+          <button id="rate-later" class="rv-link" type="button" data-i18n="rate.later">Más tarde</button>
+          <span aria-hidden="true">·</span>
+          <button id="rate-never" class="rv-link" type="button" data-i18n="rate.never">No, gracias</button>
+        </div>
+      </div>
+      <p class="privacy-note" data-i18n="save.keepOpen">Deja esta ventana abierta y no cambies de pestaña hasta que termine.</p>
+      <button id="close" class="choice" type="button"><span class="choice-copy"><strong data-i18n="save.close">Cerrar</strong></span></button>
+    </div>
+  </main>
+
+  <!-- Vista previa antes de guardar -->
+  <section id="review" class="review" hidden>
+    <header class="review-top">
+      <img class="brand-mark" src="favicon.svg" alt="">
+      <div class="review-heading">
+        <h2 data-i18n="rv.title">Vista previa</h2>
+        <p id="rv-summary"></p>
+      </div>
+      <label class="rv-name" hidden>
+        <span data-i18n="rv.fileName">Nombre del archivo</span>
+        <span class="rv-name-box"><input id="rv-filename" type="text" autocomplete="off" spellcheck="false"><span id="rv-filename-ext"></span></span>
+      </label>
+      <p id="rv-error" class="rv-error" role="alert"></p>
+      <div class="review-actions">
+        <button id="rv-cancel" type="button" class="rv-button" data-i18n="rv.cancel">Cancelar</button>
+        <button id="rv-save" type="button" class="rv-button rv-primary">Guardar</button>
+      </div>
+    </header>
+    <div class="review-body">
+      <aside id="rv-side" class="review-side"></aside>
+      <div class="review-preview">
+        <div id="rv-tools" class="rv-tools" hidden>
+          <div class="rv-tool-group" role="group">
+            <button type="button" class="rv-tool" data-tool="none" data-i18n="ann.none">Navegar</button>
+            <button type="button" class="rv-tool" data-tool="highlight" data-i18n="ann.highlight">Resaltar</button>
+            <button type="button" class="rv-tool" data-tool="remove" data-i18n="ann.remove">Quitar</button>
+            <button type="button" class="rv-tool" data-tool="note" data-i18n="ann.note">Añadir nota</button>
+          </div>
+          <span id="rv-tools-hint" class="rv-tools-hint"></span>
+          <button type="button" id="rv-undo" class="rv-tool rv-undo" data-i18n="ann.undo" disabled>Deshacer</button>
+        </div>
+        <iframe id="rv-frame" sandbox="allow-same-origin" title="Vista previa" data-i18n-attr="title:rv.title"></iframe>
+        <div id="rv-pages" class="rv-pages" hidden></div>
+      </div>
+    </div>
+  </section>
+  <script src="i18n.js"></script>
+  <script src="review.js"></script>
+  <script src="pdfwriter.js"></script>
+  <script src="save.js"></script>
+</body>
+</html>

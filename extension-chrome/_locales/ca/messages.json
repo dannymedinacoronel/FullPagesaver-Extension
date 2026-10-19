@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "FullPage Saver – Desa la pàgina completa en HTML i PDF"
+  },
+  "extDesc": {
+    "message": "Obre menús, recorre la pàgina fins al final i la desa completa en un únic HTML a punt per convertir a PDF."
+  },
+  "actionTitle": {
+    "message": "FullPage Saver: desa la pàgina completa"
+  },
+  "cmdSavePdf": {
+    "message": "Desa la pàgina com a PDF"
+  }
+}

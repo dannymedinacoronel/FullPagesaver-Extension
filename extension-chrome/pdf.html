@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title data-i18n="pdf.docTitle">Preparar PDF | FullPage Saver</title>
+  <link rel="stylesheet" href="pdf.css">
+  <script src="theme.js"></script>
+</head>
+<body data-particles="page">
+  <header class="topbar">
+    <div class="brand" aria-label="FullPage Saver">
+      <img class="brand-mark" src="favicon.svg" alt="">
+      <span>FullPage Saver <span class="brand-light">· PDF</span></span>
+    </div>
+    <span class="local-badge"><span aria-hidden="true"></span> <span data-i18n="pdf.local">Procesamiento local</span></span>
+  </header>
+
+  <main class="workspace">
+    <section class="intro">
+      <p class="eyebrow" data-i18n="pdf.eyebrow">PREPARAR UN DOCUMENTO</p>
+      <h1 data-i18n="pdf.h1">HTML guardado a PDF</h1>
+      <p data-i18n-html="pdf.intro">Añade uno o varios archivos HTML guardados con páginas en imágenes de <code>canvas</code>. Revisa el orden y elige cómo quieres el PDF.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2 data-i18n="pdf.step1">1. Añade tus archivos</h2>
+          <p data-i18n="pdf.step1desc">Arrastra archivos aquí o selecciónalos desde tu equipo.</p>
+        </div>
+        <div class="file-pickers">
+          <label class="button button-secondary file-picker" for="folder-input" data-i18n="pdf.addFolder">Añadir carpeta</label>
+          <label class="button button-secondary file-picker" for="file-input" data-i18n="pdf.addFiles">Añadir archivos</label>
+        </div>
+        <input id="file-input" type="file" accept=".html,.htm,text/html" multiple>
+        <!-- Todos los HTML de una carpeta de una vez -->
+        <input id="folder-input" type="file" webkitdirectory multiple>
+      </div>
+
+      <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Zona para arrastrar y soltar archivos HTML" data-i18n-attr="aria-label:pdf.dropAria">
+        <div class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></div>
+        <strong data-i18n="pdf.dropTitle">Suelta aquí tus archivos HTML</strong>
+        <span data-i18n="pdf.dropDesc">Admite varios archivos. Puedes añadir más en cualquier momento.</span>
+      </div>
+
+      <div class="queue-heading">
+        <h3><span data-i18n="pdf.queue">Archivos para el PDF</span> <span id="file-count" class="count">0</span></h3>
+        <button id="clear-files" class="text-button" type="button" disabled data-i18n="pdf.clear">Quitar todos</button>
+      </div>
+      <ol id="file-list" class="file-list" aria-live="polite"></ol>
+      <p id="empty-state" class="empty-state" data-i18n="pdf.empty">Aún no has añadido archivos.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading options-heading">
+        <div>
+          <h2 data-i18n="pdf.step2">2. Elige el resultado</h2>
+          <p data-i18n="pdf.step2desc">Se preparará una página impresa por cada imagen encontrada.</p>
+        </div>
+      </div>
+
+      <div class="options-grid">
+        <label class="field">
+          <span data-i18n="pdf.scope">Archivos a incluir</span>
+          <select id="scope" disabled>
+            <option value="all" data-i18n="pdf.allFiles">Todos los archivos</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="pdf.output">Archivos de salida</span>
+          <select id="output-mode">
+            <option value="combined" data-i18n="pdf.combined">Un PDF combinado</option>
+            <option value="separate" data-i18n="pdf.separate">PDF independiente por cada archivo</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="pdf.paper">Tamaño de papel</span>
+          <select id="paper">
+            <option value="A4">A4</option>
+            <option value="Letter" data-i18n="pdf.letterLong">Carta (Letter)</option>
+            <option value="A3">A3</option>
+            <option value="Legal" data-i18n="paper.legal">Legal</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="popup.orientation">Orientación</span>
+          <select id="orientation">
+            <option value="portrait" data-i18n="opt.portrait">Vertical</option>
+            <option value="landscape" data-i18n="opt.landscape">Horizontal</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="pdf.margins">Márgenes</span>
+          <select id="margin">
+            <option value="0" data-i18n="pdf.m0">Sin margen</option>
+            <option value="5" data-i18n="pdf.m5">Estrechos (5 mm)</option>
+            <option value="10" selected data-i18n="pdf.m10">Normales (10 mm)</option>
+            <option value="15" data-i18n="pdf.m15">Amplios (15 mm)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="pdf.fit">Ajuste de imagen</span>
+          <select id="fit">
+            <option value="contain" data-i18n="pdf.contain">Encajar completa</option>
+            <option value="cover" data-i18n="pdf.cover">Rellenar página (puede recortar)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="pdf.order">Orden</span>
+          <select id="order">
+            <option value="selected" data-i18n="pdf.orderList">Orden de la lista</option>
+            <option value="name" data-i18n="pdf.orderName">Nombre del archivo (A-Z)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="action-row">
+        <button id="prepare" class="button button-primary" type="button" disabled>
+          Preparar vista previa
+        </button>
+        <span id="status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <p class="footnote" data-i18n="pdf.footnote">Los archivos se procesan en este navegador. Al continuar se abrirá una vista de impresión. En modo independiente podrás revisar y guardar cada archivo por separado; Chrome preguntará la ubicación en cada PDF.</p>
+  </main>
+  <script src="i18n.js"></script>
+  <script src="pdf.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "FullPage Saver – Guardar página completa en HTML y PDF"
+  },
+  "extDesc": {
+    "message": "Abre menús, recorre la página hasta el final y la guarda completa en un único HTML listo para convertir a PDF."
+  },
+  "actionTitle": {
+    "message": "FullPage Saver: guardar página completa"
+  },
+  "cmdSavePdf": {
+    "message": "Guardar la página como PDF"
+  }
+}

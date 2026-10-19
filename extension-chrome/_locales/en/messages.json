@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "FullPage Saver – Save full web pages as HTML and PDF"
+  },
+  "extDesc": {
+    "message": "Opens menus, scrolls to the end and saves the whole page in a single HTML file, ready to turn into a PDF."
+  },
+  "actionTitle": {
+    "message": "FullPage Saver: save the full page"
+  },
+  "cmdSavePdf": {
+    "message": "Save the page as PDF"
+  }
+}
