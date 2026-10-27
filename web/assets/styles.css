@@ -103,7 +103,13 @@ code { font: .9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; back
 .badges { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 0; margin: 0 0 14px; font-weight: 600; font-size: .95rem; }
 .badges li { display: inline-flex; align-items: center; gap: 6px; }
 .badges .icon { color: var(--brand-2); }
-.hero-visual img { border-radius: 20px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+.video { position: relative; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--border); background: #0b1020; }
+.video-play { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; cursor: pointer; background: none; display: block; }
+.video-play img, .video iframe { width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
+.play-icon { position: absolute; inset: 0; margin: auto; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; background: var(--grad); color: #fff; box-shadow: 0 10px 30px rgb(0 0 0 / 40%); transition: transform .15s; }
+.play-icon svg { width: 34px; height: 34px; margin-left: 4px; }
+.video-play:hover .play-icon { transform: scale(1.08); }
+.video-note { margin: 12px 0 0; text-align: center; }
 
 /* Secciones */
 .section { padding: clamp(56px, 8vw, 96px) 0; }

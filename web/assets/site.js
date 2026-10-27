@@ -24,6 +24,18 @@
     });
   });
 
+  // El vídeo de YouTube solo se carga al pulsar reproducir (youtube-nocookie).
+  document.querySelectorAll(".video").forEach((video) => {
+    video.querySelector(".video-play").addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src = `https://www.youtube-nocookie.com/embed/${video.dataset.video}?autoplay=1&rel=0`;
+      frame.title = video.dataset.title;
+      frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      frame.allowFullscreen = true;
+      video.replaceChildren(frame);
+    });
+  });
+
   const box = document.getElementById("lightbox");
   if (box) {
     const image = box.querySelector("img");
