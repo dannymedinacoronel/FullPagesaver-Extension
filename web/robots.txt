@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://fullpagesaver-extension.netlify.app/sitemap.xml
