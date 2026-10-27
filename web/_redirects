@@ -1,0 +1,11 @@
+# Idioma del navegador -> versión de la web (Netlify)
+/   /ca/   302!  Language=ca
+/   /en/   302!  Language=en
+/   /es/   302!  Language=es
+/   /en/   302!
+/privacy   /es/privacy/   302!  Language=es
+/privacy   /ca/privacy/   302!  Language=ca
+/privacy   /en/privacy/   302!
+/support   /es/support/   302!  Language=es
+/support   /ca/support/   302!  Language=ca
+/support   /en/support/   302!

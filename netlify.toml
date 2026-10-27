@@ -1,0 +1,3 @@
+# Netlify publica la carpeta web/ (sitio estático generado con tools/build-web.js).
+[build]
+  publish = "web"
