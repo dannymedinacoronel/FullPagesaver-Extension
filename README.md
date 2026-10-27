@@ -5,7 +5,7 @@
 
 ![FullPage Saver](docs/capturas/portada.png)
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Instalar-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/fullpage-saver-%E2%80%93-guardar/igjphghlkmidddmnmlmdnhnepehpoena) [![Descargar ZIP](https://img.shields.io/badge/⬇_Descargar_ZIP-v2.9.7-00ffcc?style=for-the-badge&logo=github&logoColor=black)](https://github.com/dannymedinacoronel/FullPagesaver-Extension/releases/latest)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Instalar-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/fullpage-saver-%E2%80%93-guardar/igjphghlkmidddmnmlmdnhnepehpoena) [![Descargar ZIP](https://img.shields.io/badge/⬇_Descargar_ZIP-v2.10.0-00ffcc?style=for-the-badge&logo=github&logoColor=black)](https://github.com/dannymedinacoronel/FullPagesaver-Extension/releases/latest)
 
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-7b2ff7?style=flat-square) ![Idiomas](https://img.shields.io/badge/idiomas-7-3b82f6?style=flat-square) ![Gratis](https://img.shields.io/badge/precio-gratis-2e9b63?style=flat-square) ![Sin servidores](https://img.shields.io/badge/servidores-ninguno-2e9b63?style=flat-square)
 
@@ -44,6 +44,8 @@
 
 **Más**
 - **Varias pestañas** de una vez: un HTML o un PDF por pestaña, o todas en un único PDF.
+- **Lista de direcciones**: pega varias URLs en «Varias pestañas» y se abren y guardan una a una.
+- **Imagen PNG** de la página completa (en varias partes si es muy larga).
 - **Conversor de HTML guardados a PDF**, sin límite de archivos: añádelos uno a uno o una carpeta entera; un PDF por archivo (con su nombre original) o uno combinado.
 - **Velocidad de captura** rápida, normal o lenta, y **repaso automático** de lo que no terminó de cargar (spinners, páginas en blanco).
 - **Modo aplicación** para Gmail, Drive, Outlook…: no pulsa nada y recorre solo el panel principal.
@@ -64,7 +66,7 @@ Entra en **[FullPage Saver en la Chrome Web Store](https://chromewebstore.google
 
 ### Opción 2: manualmente, con el paquete del Release
 
-1. Ve a **[Releases](../../releases/latest)** y descarga `fullpage-saver-2.9.7.zip`.
+1. Ve a **[Releases](../../releases/latest)** y descarga `fullpage-saver-2.10.0.zip`.
 2. Descomprime el ZIP en una carpeta que no vayas a borrar (Chrome la lee desde ahí).
 3. Abre `chrome://extensions` y activa el **Modo de desarrollador** (arriba a la derecha).
 4. Pulsa **Cargar descomprimida** y elige la carpeta descomprimida (la que contiene `manifest.json`).
