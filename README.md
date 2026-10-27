@@ -13,6 +13,8 @@
 
 > El repositorio contiene la información y los paquetes de instalación. El código fuente es privado.
 
+▶ **[Ver el vídeo de presentación](https://www.youtube.com/watch?v=SuRvwytMjKg)**
+
 
 > Manifest V3 · JavaScript puro, sin dependencias ni código remoto · 7 idiomas · todo se procesa en el equipo del usuario.
 

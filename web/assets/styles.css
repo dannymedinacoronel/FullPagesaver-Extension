@@ -220,3 +220,17 @@ code { font: .9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; back
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
 }
+
+/* Comparativa y novedades */
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); margin-bottom: 14px; }
+.compare { width: 100%; border-collapse: collapse; min-width: 560px; }
+.compare th, .compare td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--border); }
+.compare thead th { font-size: .9rem; color: var(--muted); }
+.compare tbody th { text-align: left; font-weight: 600; }
+.compare tr:last-child th, .compare tr:last-child td { border-bottom: 0; }
+.compare .us { background: color-mix(in srgb, var(--brand) 8%, transparent); color: var(--brand); font-weight: 800; }
+.yes { color: #16a34a; font-weight: 800; font-size: 1.15rem; }
+.no { color: var(--muted); }
+.entry { margin-bottom: 16px; align-items: stretch; }
+.entry h2 { font-size: 1.3rem; }
+.entry ul { margin: 0; padding-left: 1.2em; color: var(--muted); }
